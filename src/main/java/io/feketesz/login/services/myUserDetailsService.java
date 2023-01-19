@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class userDetailsService implements UserDetailsService {
+public class myUserDetailsService implements UserDetailsService {
 
     @Autowired
     userRepo userRepo;
