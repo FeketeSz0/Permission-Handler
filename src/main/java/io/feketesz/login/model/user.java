@@ -1,18 +1,18 @@
 package io.feketesz.login.model;
 
-import io.feketesz.login.model.roleEnum;
+import java.util.List;
 
 public class user {
     private int id;
     private String username;
     private String password;
     private boolean isActive;
-    private roleEnum Roles;
+    private List<roleEnum> Roles;
 
     public user() {
     }
 
-    public user(int id, String username, String password, boolean isActive, roleEnum roles) {
+    public user(int id, String username, String password, boolean isActive, List<roleEnum> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -52,11 +52,11 @@ public class user {
         isActive = active;
     }
 
-    public roleEnum getRoles() {
+    public List<roleEnum> getRoles() {
         return Roles;
     }
 
-    public void setRoles(roleEnum roles) {
+    public void setRoles(List<roleEnum> roles) {
         Roles = roles;
     }
 }
