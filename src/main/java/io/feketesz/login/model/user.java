@@ -15,7 +15,7 @@ public class user {
     private String password;
     private boolean isActive;
 
-    @Enumerated(EnumType.STRING)
+
     private List<roleEnum> Roles;
 
     public user() {

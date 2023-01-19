@@ -3,6 +3,8 @@ package io.feketesz.login.configurations;
 import io.feketesz.login.model.myUserDetails;
 import io.feketesz.login.model.roleEnum;
 import io.feketesz.login.services.myUserDetailsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,18 +24,25 @@ public class securityConfig {
     private myUserDetailsService myUserDetailsService;
 
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
         return http
                 .authorizeRequests()
-                .requestMatchers("/api/user/**").hasRole(roleEnum.USER.getRole())
-                .and().formLogin()
+                .requestMatchers("/api/user/**").hasAuthority("USER")
+                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+
+
+                .and().formLogin().defaultSuccessUrl("/api/")
+                .and()
+                .logout().logoutSuccessUrl("/login")
+
                 .and().build();
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(myUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
@@ -41,9 +50,9 @@ public class securityConfig {
     }
 
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

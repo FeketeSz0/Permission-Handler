@@ -1,35 +1,42 @@
 package io.feketesz.login.model;
 
+import io.feketesz.login.configurations.securityConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class myUserDetails implements UserDetails {
-
+    Logger logger = LoggerFactory.getLogger(myUserDetails.class);
     private String username;
     private String password;
     private Boolean isActive;
-    private List<GrantedAuthority> roles = new ArrayList<>();
+    private List<roleEnum> roles;
 
 
     public myUserDetails(user user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.isActive = user.isActive();
-        this.roles = user.getRoles().stream()
-                .map(role->new SimpleGrantedAuthority(role.getRole()))
-                .collect(Collectors.toList());
+        this.roles = user.getRoles();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for(roleEnum role: roles){
+            logger.info("role added to grantedAuthority: " + role.getRole());
+            authorities.add(new SimpleGrantedAuthority(role.getRole().toUpperCase()));
+        }
+
+        for(var a :authorities){
+            logger.info("these are the content of auhtorities " + a);
+        }
+        return authorities;
     }
 
     @Override
