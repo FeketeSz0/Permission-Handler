@@ -1,12 +1,21 @@
 package io.feketesz.login.model;
 
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
+@Table(name = "users")
 public class user {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String username;
     private String password;
     private boolean isActive;
+
+    @Enumerated(EnumType.STRING)
     private List<roleEnum> Roles;
 
     public user() {
