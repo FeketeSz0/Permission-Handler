@@ -1,0 +1,28 @@
+h2{
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.customcard{
+background-color: rgb(255, 255, 255);
+height: 100%;
+border-width: 2px;
+}
+body{
+
+    height: 100%;
+}
+html{
+    height: 100%;
+}
+a{
+    color: aliceblue;
+}
+a:hover{
+    color: rgb(222, 142, 45);
+}
+button{
+    width: 300px;
+    margin-top: 20px;
+    color: black;
+}

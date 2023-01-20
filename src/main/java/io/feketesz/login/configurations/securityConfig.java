@@ -34,7 +34,7 @@ public class securityConfig {
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
 
 
-                .and().formLogin().defaultSuccessUrl("/api/")
+                .and().formLogin().loginPage("/api/login").defaultSuccessUrl("/api/")
                 .and()
                 .logout().logoutSuccessUrl("/login")
 

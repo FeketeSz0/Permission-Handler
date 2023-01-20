@@ -4,20 +4,21 @@ import io.feketesz.login.model.registrationForm;
 import io.feketesz.login.model.user;
 import io.feketesz.login.services.userService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class homeController {
 
     @Autowired
     userService userService;
 
-    @GetMapping
+    @GetMapping("/login")
     public String indexpage(){
-        return "index";
+        return "log";
     }
 
 
