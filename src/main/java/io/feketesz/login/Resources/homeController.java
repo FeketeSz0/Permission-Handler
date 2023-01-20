@@ -43,10 +43,11 @@ public class homeController {
     }
 
 
-    @PostMapping("/register")
-    public String register(@RequestParam registrationForm registrationForm){
-        userService.register(registrationForm);
-        return "registered";
+    @GetMapping("/register")
+    public String register(Principal principal){
+        if(principal!=null){
+        return "register";}
+        return "redirect:logout";
     }
 
 }
