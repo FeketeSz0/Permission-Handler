@@ -21,8 +21,7 @@ public class user {
     public user() {
     }
 
-    public user(int id, String username, String password, boolean isActive, List<roleEnum> roles) {
-        this.id = id;
+    public user(String username, String password, boolean isActive, List<roleEnum> roles) {
         this.username = username;
         this.password = password;
         this.isActive = isActive;

@@ -22,7 +22,7 @@ public class LoginApplication {
     @Bean
     CommandLineRunner commandLineRunne(userRepo userRepo) {
         return args -> {
-            userRepo.save(new user(1,"sample",new BCryptPasswordEncoder().encode("sample"),true, List.of(roleEnum.USER)));
+            userRepo.save(new user("sample",new BCryptPasswordEncoder().encode("sample"),true, List.of(roleEnum.USER)));
         };
     }
 }

@@ -16,19 +16,20 @@ public class userService {
     @Autowired
     userRepo userRepo;
 
-    public void register(registrationForm form) {
+    public String register(registrationForm form) {
         //password validate
         if (!form.getPassword().equals(form.getPassword2())) {
-            throw new RuntimeException("the passwords are not matching");
+            return "the passwords are not matching";
         }
         boolean isUsernameTaken = userRepo.findByusername(form.getUsername()).isPresent();
 
         if (isUsernameTaken) {
-            throw new RuntimeException("username is already taken");
+            return "username is already taken";
         }
 
-        user newUser = new user(1, form.getUsername(), new BCryptPasswordEncoder().encode(form.getPassword()), true, List.of(roleEnum.USER));
+        user newUser = new user(form.getUsername(), new BCryptPasswordEncoder().encode(form.getPassword()), true, List.of(roleEnum.USER));
         userRepo.save(newUser);
+        return "";
     }
 
 
