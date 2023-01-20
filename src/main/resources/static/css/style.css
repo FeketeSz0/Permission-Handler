@@ -5,7 +5,7 @@ h2{
 
 .customcard{
 background-color: rgb(255, 255, 255);
-height: 100%;
+max-height: 650px;
 border-width: 2px;
 }
 body{

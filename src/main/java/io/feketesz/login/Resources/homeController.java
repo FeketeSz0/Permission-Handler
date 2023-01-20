@@ -22,7 +22,9 @@ public class homeController {
     userService userService;
 
     @GetMapping("/login")
-    public String loginPage(Principal principal){
+    public String loginPage(Principal principal, @RequestParam(value = "logout", required = false) boolean logout, Model model){
+       if(logout){model.addAttribute("logout",logout);}
+
         if(principal==null){
             return "login";}
         return "redirect:logout";

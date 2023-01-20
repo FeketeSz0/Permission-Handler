@@ -38,10 +38,10 @@
                             <button class="btn btn-outline-secondary btn-lg px-5 " type="submit">Login</button>
 
                             <button class="btn btn-outline-secondary btn-lg px-5 mt-4" type="button">Create account</button>
-                            <div th:if="${param.error}" class="alert alert-error">
+                            <div th:if="${param.error}" class="alert alert-danger mt-5">
                                 Invalid username and password.
                             </div>
-                            <div th:if="${param.logout}" class="alert alert-success">
+                            <div th:if="${logout}" class="alert alert-success mt-5">
                                 You have been logged out.
                             </div>
                         </div>
@@ -53,6 +53,7 @@
         </div>
     </div>
 </form>
+</div>
 </body>
 
 </html>

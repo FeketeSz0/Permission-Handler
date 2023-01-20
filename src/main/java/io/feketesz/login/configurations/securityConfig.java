@@ -36,7 +36,7 @@ public class securityConfig {
 
                 .and().formLogin().loginPage("/api/login").defaultSuccessUrl("/api")
                 .and()
-                .logout().logoutUrl("/api/logout").logoutSuccessUrl("/api/login")
+                .logout().logoutUrl("/api/logout").logoutSuccessUrl("/api/login?logout=true")
 
                 .and().build();
     }
