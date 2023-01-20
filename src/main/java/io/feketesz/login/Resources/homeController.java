@@ -5,6 +5,7 @@ import io.feketesz.login.model.user;
 import io.feketesz.login.services.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -17,16 +18,23 @@ public class homeController {
     userService userService;
 
     @GetMapping("/login")
-    public String indexpage(){
-        return "log";
+    public String loginPage(){
+        return "login";
     }
 
+    @GetMapping("/logout")
+    public String logoutPage(){
+        return "logout";
+    }
 
     @GetMapping("/user")
     public String userPage(){
+        return "userpage";
+    }
 
-
-        return "user";
+    @GetMapping()
+    public String index(){
+        return "index";
     }
 
     @GetMapping("/admin")

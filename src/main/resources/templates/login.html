@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,8 @@
 
 
 <div class="container py-5 h-100">
-
-    <div class="form-group">
+<form name="f" th:action="@{/api/login}" method="post">
+    <div class="form-group" >
         <div class="row d-flex justify-content-center align-items-center ">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card customcard pb-3" style="border-radius: 1rem;">
@@ -30,14 +30,20 @@
                             <p class="text-black-50 mb-5">Please enter your username and password!</p>
 
                             <div class="form-outline form-white mb-4">
-                                <input type="email" id="typeEmailX" class="form-control form-control-lg" placeholder="username"/>
+                                <input type="text" name="username" class="form-control form-control-lg" placeholder="username" />
                             </div>
                             <div class="form-outline form-white mb-5">
-                                <input type="password" id="typePasswordX" class="form-control form-control-lg" placeholder="password" />
+                                <input type="password" name="password" class="form-control form-control-lg" placeholder="password"/>
                             </div>
                             <button class="btn btn-outline-secondary btn-lg px-5 " type="submit">Login</button>
 
-                            <button class="btn btn-outline-secondary btn-lg px-5 mt-4" type="submit">Create account</button>
+                            <button class="btn btn-outline-secondary btn-lg px-5 mt-4" type="button">Create account</button>
+                            <div th:if="${param.error}" class="alert alert-error">
+                                Invalid username and password.
+                            </div>
+                            <div th:if="${param.logout}" class="alert alert-success">
+                                You have been logged out.
+                            </div>
                         </div>
                     </div>
 
@@ -46,7 +52,7 @@
             </div>
         </div>
     </div>
-
+</form>
 </body>
 
 </html>
