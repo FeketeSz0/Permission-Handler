@@ -34,6 +34,10 @@ public class userService {
             return "username is already taken";
         }
 
+        if(form.getUsername().isEmpty() || form.getPassword().isEmpty()){
+            return "the fields cannot be empty";
+        }
+
         user newUser = new user(form.getUsername(), new BCryptPasswordEncoder().encode(form.getPassword()), true, List.of(roleEnum.USER));
         userRepo.save(newUser);
 
@@ -51,6 +55,14 @@ public class userService {
            var user = userRepo.findByusername(form.getUsername());
             user.get().setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
 
+    }
+
+    public List<user> userList(){
+       return userRepo.findAll();
+    }
+
+    public user finduser(String username){
+        return userRepo.findByusername(username).get();
     }
 
 

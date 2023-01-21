@@ -23,6 +23,9 @@ public class LoginApplication {
     CommandLineRunner commandLineRunne(userRepo userRepo) {
         return args -> {
             userRepo.save(new user("sample",new BCryptPasswordEncoder().encode("sample"),true, List.of(roleEnum.USER)));
+            userRepo.save(new user("admin",new BCryptPasswordEncoder().encode("admin"),true, List.of(roleEnum.ADMIN)));
+
         };
+
     }
 }

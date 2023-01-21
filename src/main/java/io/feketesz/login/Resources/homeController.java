@@ -43,19 +43,10 @@ public class homeController {
         return "logout";
     }
 
-    @GetMapping("/user")
-    public String userPage(Principal principal, Model model, Boolean isLoggedIn) {
-        if (principal == null) {
-            isLoggedIn = false;
-        } else {
-            isLoggedIn = true;
-        }
-        model.addAttribute("isLoggedIn", isLoggedIn);
-        return "userpage";
-    }
 
     @GetMapping()
     public String index(Principal principal, Model model, Boolean isLoggedIn) {
+
 
         if (principal == null) {
             isLoggedIn = false;
@@ -67,9 +58,34 @@ public class homeController {
     }
 
     @GetMapping("/admin")
-    public String adminPage() {
+    public String adminPage(Model model, Principal principal) {
+     var currentAdmin = userService.finduser(principal.getName());
+
+      var userlist =  userService.userList();
+        model.addAttribute("userlist",userlist);
         return "admin";
     }
+
+    @GetMapping("/user")
+    public String userPage(Principal principal, Model model, Boolean isLoggedIn) {
+        if (principal == null) {
+            isLoggedIn = false;
+        } else {
+            isLoggedIn = true;
+        }
+        model.addAttribute("isLoggedIn", isLoggedIn);
+        return "userpage";
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     @GetMapping("/register")
