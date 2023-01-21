@@ -30,9 +30,9 @@ public class securityConfig {
 
         return http
                 .authorizeRequests()
-                .requestMatchers("/api/user/**").hasAuthority("USER")
+                .requestMatchers("/api/user/**").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-
+                .and().exceptionHandling().accessDeniedPage("/api/403")
 
                 .and().formLogin().loginPage("/api/login").defaultSuccessUrl("/api")
                 .and()

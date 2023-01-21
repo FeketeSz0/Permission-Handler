@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>userPage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav th:replace="navbar :: navbar"></nav>
+
+<div class="container" th:object="${user}">
+    <h3>Your Profile</h3>
+    <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/user">Active</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true" href="#">Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="D">Delete Account</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <form name="f" th:action="@{/api/login}" method="post">
+            <h5 class="card-title">Change password</h5>
+                <div class="form-outline form-white mb-4">
+                    <input type="text" class="form-control form-control-lg" placeholder="Old Password" />
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <input type="text" class="form-control form-control-lg" placeholder="New Password" />
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <input type="text" class="form-control form-control-lg" placeholder="New Password again" />
+                </div>
+            <a href="#" class="btn btn-secondary">Change password</a>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

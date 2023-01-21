@@ -1,14 +1,17 @@
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
     <div class="container">
         <a class="navbar-brand" href="/api">Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"  th:if="${isLoggedIn}">
-                    <a class="nav-link" href="/api/user">Private page</a>
+                <li class="nav-item" th:if="${isLoggedIn}">
+                    <a class="nav-link" href="/api/user">YOUR page</a>
+                </li>
+                <li class="nav-item" th:if="${isAdmin}">
+                    <a class="nav-link" href="/api/admin">admin</a>
                 </li>
                 <li class="nav-item" th:if="${isLoggedIn}">
                     <a class="nav-link" href="/api/logout">Logout</a>

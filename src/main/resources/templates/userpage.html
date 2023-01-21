@@ -13,9 +13,33 @@
 <body>
 <nav th:replace="navbar :: navbar"></nav>
 
+<div class="container" th:object="${user}">
+<h3>Your Profile</h3>
+<div class="card text-center">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="true" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="user/P">Change Password</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="user/D">Delete Account</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Hello <span th:text=${user.username}></span></h5>
+        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis atque pariatur
+            consequuntur asperiores adipisci! Maiores aliquam fugiat sed debitis tempore! Suscipit, nemo fuga! Culpa porro
+            voluptatibus, perspiciatis maiores reiciendis quae..</p>
+
+    </div>
+</div>
 
 
+</div>
 
-<h1>USERPAGE</h1>
 </body>
 </html>

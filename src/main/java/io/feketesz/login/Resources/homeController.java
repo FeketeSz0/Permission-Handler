@@ -1,6 +1,7 @@
 package io.feketesz.login.Resources;
 
 import io.feketesz.login.model.registrationForm;
+import io.feketesz.login.model.roleEnum;
 import io.feketesz.login.services.userService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,8 @@ public class homeController {
         if (logout) {
             model.addAttribute("logout", logout);
         }
-        if(registered){
-            model.addAttribute("registered",registered);
+        if (registered) {
+            model.addAttribute("registered", registered);
         }
         if (principal == null) {
             return "login";
@@ -52,17 +53,32 @@ public class homeController {
             isLoggedIn = false;
         } else {
             isLoggedIn = true;
+            var currentAdmin = userService.finduser(principal.getName());
+            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin",isAdmin);
+
         }
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "index";
     }
 
     @GetMapping("/admin")
-    public String adminPage(Model model, Principal principal) {
-     var currentAdmin = userService.finduser(principal.getName());
+    public String adminPage(Model model, Principal principal, Boolean isLoggedIn) {
+        if(principal==null){
+            isLoggedIn = false;
+        }else{
+            isLoggedIn= true;
+            var currentAdmin = userService.finduser(principal.getName());
+            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin",isAdmin);
 
-      var userlist =  userService.userList();
-        model.addAttribute("userlist",userlist);
+        }
+        model.addAttribute("isLoggedIn",isLoggedIn);
+
+
+
+      /*  var userlist = userService.userList();
+        model.addAttribute("userlist", userlist);*/
         return "admin";
     }
 
@@ -72,20 +88,43 @@ public class homeController {
             isLoggedIn = false;
         } else {
             isLoggedIn = true;
+            var user = userService.finduser(principal.getName());
+            var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("user", user);
         }
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage";
     }
+    @GetMapping("/user/P")
+    public String userEditPassword(Principal principal, Model model, Boolean isLoggedIn) {
+        if (principal == null) {
+            isLoggedIn = false;
+        } else {
+            isLoggedIn = true;
+            var user = userService.finduser(principal.getName());
+            var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("isLoggedIn", isLoggedIn);
+        return "userpage2";
+    }
 
-
-
-
-
-
-
-
-
-
+    @GetMapping("/user/D")
+    public String userDeleteAccount(Principal principal, Model model, Boolean isLoggedIn) {
+        if (principal == null) {
+            isLoggedIn = false;
+        } else {
+            isLoggedIn = true;
+            var user = userService.finduser(principal.getName());
+            var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("isLoggedIn", isLoggedIn);
+        return "userpage3";
+    }
 
 
     @GetMapping("/register")
@@ -113,6 +152,11 @@ public class homeController {
 
         return "redirect:login?registered=true";
 
+    }
+
+    @GetMapping("/403")
+    public String forbidden(){
+        return "403";
     }
 
 }
