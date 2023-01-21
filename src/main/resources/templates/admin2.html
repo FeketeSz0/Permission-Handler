@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:td="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,31 +9,44 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
+
 <nav th:replace="navbar :: navbar"></nav>
 
 <div class="container">
-    <h3>UserList</h3>
+    <h3>Edit User</h3>
     <table class="table table-hover">
         <thead>
         <th scope="col">userId</th>
         <th scope="col">Username</th>
         <th scope="col">Roles</th>
         <th scope="col">Active?</th>
-        <th scope="col">Edit</th>
         </thead>
 
-        <tbody th:each="user : *{userlist}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.username}"></td>
-        <td th:each="role: *{user.roles}"><span th:text="*{role} "> </span></td>
-        <td th:text="${user.isActive}"></td>
-        <th><a th:href="@{'admin/edit/' + ${user.username}}">Edit</a></th>
+        <tbody th:object="${user}">
+        <td th:text="*{id}"></td>
+        <td><input class="form-control" type="text" th:value="*{username}"></td>
+
+
+        <td>
+            <div th:each="role : ${availableRoles}" class="form-check">
+                <input class="form-check-input" type="checkbox" th:value="${role}" th:field="*{roles}" th:id="${role}" th:checked="${user.roles.contains(role)}"/>
+                <label class="form-check-label" th:for="${role}">
+                    <span th:text="${role}"></span>
+                </label>
+            </div>
+        </td>
+
+
+        <td><input class="form-control-input" type="checkbox" th:checked="*{isActive}"></td>
+
+
         </tbody>
 
 
     </table>
 </div>
+
+
 </body>
 </html>

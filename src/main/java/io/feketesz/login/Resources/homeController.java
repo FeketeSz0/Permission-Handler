@@ -2,6 +2,7 @@ package io.feketesz.login.Resources;
 
 import io.feketesz.login.model.registrationForm;
 import io.feketesz.login.model.roleEnum;
+import io.feketesz.login.model.user;
 import io.feketesz.login.services.userService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api")
@@ -74,12 +76,37 @@ public class homeController {
 
         }
         model.addAttribute("isLoggedIn",isLoggedIn);
+        var userlist = userService.userList();
+        userlist.forEach(user->logger.info("user is in the list: " + user.getUsername()));
 
-
-
-      /*  var userlist = userService.userList();
-        model.addAttribute("userlist", userlist);*/
+        model.addAttribute("user", new user());
+        model.addAttribute("userlist", userlist);
         return "admin";
+    }
+
+    @GetMapping("/admin/edit/{username}")
+    public String adminPageEdit(Model model, Principal principal, Boolean isLoggedIn, @PathVariable("username") String username) {
+        if(principal==null){
+            isLoggedIn = false;
+        }else{
+            isLoggedIn= true;
+            var currentAdmin = userService.finduser(principal.getName());
+            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin",isAdmin);
+
+        }
+        logger.info("the path variable is: " + username);
+        model.addAttribute("isLoggedIn",isLoggedIn);
+
+        List<roleEnum> availableRoles = List.of(roleEnum.values());
+        model.addAttribute("availableRoles",availableRoles );
+
+
+        var user = userService.finduser(username);
+        logger.info("the found user is: " + user.getUsername());
+        model.addAttribute("user", user);
+
+        return "admin2";
     }
 
     @GetMapping("/user")
