@@ -1,12 +1,19 @@
 package io.feketesz.login.Resources;
 
-import io.feketesz.login.model.registrationForm;
+import io.feketesz.login.model.forms.changePasswordForm;
+import io.feketesz.login.model.forms.registrationForm;
 import io.feketesz.login.model.roleEnum;
 import io.feketesz.login.model.user;
 import io.feketesz.login.services.userService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +64,7 @@ public class homeController {
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
             var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
 
         }
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -66,18 +73,18 @@ public class homeController {
 
     @GetMapping("/admin")
     public String adminPage(Model model, Principal principal, Boolean isLoggedIn) {
-        if(principal==null){
+        if (principal == null) {
             isLoggedIn = false;
-        }else{
-            isLoggedIn= true;
+        } else {
+            isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
             var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
 
         }
-        model.addAttribute("isLoggedIn",isLoggedIn);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         var userlist = userService.userList();
-        userlist.forEach(user->logger.info("user is in the list: " + user.getUsername()));
+        userlist.forEach(user -> logger.info("user is in the list: " + user.getUsername()));
 
         model.addAttribute("user", new user());
         model.addAttribute("userlist", userlist);
@@ -86,20 +93,20 @@ public class homeController {
 
     @GetMapping("/admin/edit/{username}")
     public String adminPageEdit(Model model, Principal principal, Boolean isLoggedIn, @PathVariable("username") String username) {
-        if(principal==null){
+        if (principal == null) {
             isLoggedIn = false;
-        }else{
-            isLoggedIn= true;
+        } else {
+            isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
             var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
 
         }
         logger.info("the path variable is: " + username);
-        model.addAttribute("isLoggedIn",isLoggedIn);
+        model.addAttribute("isLoggedIn", isLoggedIn);
 
         List<roleEnum> availableRoles = List.of(roleEnum.values());
-        model.addAttribute("availableRoles",availableRoles );
+        model.addAttribute("availableRoles", availableRoles);
 
 
         var user = userService.finduser(username);
@@ -117,12 +124,13 @@ public class homeController {
             isLoggedIn = true;
             var user = userService.finduser(principal.getName());
             var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage";
     }
+
     @GetMapping("/user/P")
     public String userEditPassword(Principal principal, Model model, Boolean isLoggedIn) {
         if (principal == null) {
@@ -131,12 +139,45 @@ public class homeController {
             isLoggedIn = true;
             var user = userService.finduser(principal.getName());
             var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
+        changePasswordForm form =  new changePasswordForm();
+        model.addAttribute("form", form);
+
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage2";
     }
+
+
+    @PostMapping("/user/P")
+    public String userEditPassword(Model model, @ModelAttribute changePasswordForm form, Principal principal,Boolean isLoggedIn) {
+
+        if(principal==null){
+            isLoggedIn=false;
+        }else{isLoggedIn=true;}
+
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+
+        var user = userService.finduser(principal.getName());
+
+
+        model.addAttribute("form", form);
+        String responseMsg = userService.changePassword(form,user);
+
+
+        if (responseMsg.equals("")) {
+            String successMsg = "password saved";
+            model.addAttribute("successMsg",successMsg);
+
+        }else{
+            model.addAttribute("errorMsg", responseMsg);
+        }
+
+        return "userpage2";
+    }
+
 
     @GetMapping("/user/D")
     public String userDeleteAccount(Principal principal, Model model, Boolean isLoggedIn) {
@@ -146,12 +187,50 @@ public class homeController {
             isLoggedIn = true;
             var user = userService.finduser(principal.getName());
             var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
+
+        String confirm = "";
+
+        model.addAttribute("confirm",confirm);
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage3";
     }
+
+    @PostMapping("/user/D")
+        public String userDeleteAccount(Principal principal, Model model, HttpServletRequest request, HttpServletResponse response, Boolean isLoggedIn,
+                                        String confirm){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+
+        var user = userService.finduser(principal.getName());
+
+        var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+        model.addAttribute("isAdmin", isAdmin);
+
+        model.addAttribute("confirm",confirm);
+        model.addAttribute("user",user);
+
+
+        String responseMsg = userService.deleteUser(user, confirm);
+        logger.info("response msg is " + responseMsg);
+
+        if(!responseMsg.isEmpty()){
+            model.addAttribute("responseMsg",responseMsg);
+            isLoggedIn = true;
+            model.addAttribute("isLoggedIn", isLoggedIn);
+            return "userpage3";
+        }
+
+        isLoggedIn=false;
+        model.addAttribute("isLoggedIn", isLoggedIn);
+        new SecurityContextLogoutHandler().logout(request,response,auth);
+
+        return "index";
+    }
+
 
 
     @GetMapping("/register")
@@ -182,7 +261,7 @@ public class homeController {
     }
 
     @GetMapping("/403")
-    public String forbidden(){
+    public String forbidden() {
         return "403";
     }
 

@@ -1,23 +1,19 @@
 package io.feketesz.login.services;
 
-import io.feketesz.login.Resources.homeController;
-import io.feketesz.login.model.registrationForm;
+import io.feketesz.login.model.forms.changePasswordForm;
+import io.feketesz.login.model.forms.registrationForm;
 import io.feketesz.login.model.roleEnum;
 import io.feketesz.login.model.user;
 import io.feketesz.login.repositories.userRepo;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -53,13 +49,29 @@ public class userService {
 
 
 
-    public void changePassword(registrationForm form){
-        if (!form.getPassword().equals(form.getPassword2())) {
-            throw new RuntimeException("the passwords are not matching");
+    public String changePassword(changePasswordForm form, user user){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if(form.getOldPassword().equals("") || form.getNewPassword1().equals("")){
+            return "field cannot be empty";
         }
 
-           var user = userRepo.findByusername(form.getUsername());
-            user.get().setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
+        if (!form.getNewPassword1().equals(form.getNewPassword2())) {
+          return "the passwords are not matching";
+        }
+
+        if(encoder.matches(user.getPassword(), form.getOldPassword())){
+
+            return "your old password is incorrect";
+        }
+        if(form.getOldPassword().equals(form.getNewPassword1())){
+            return "the new password cannot be the old one";
+        }
+
+
+        user.setPassword(encoder.encode(form.getNewPassword1()));
+        userRepo.save(user);
+            return "";
 
     }
 
@@ -76,6 +88,25 @@ public class userService {
 
         logger.info("This what userService/finduser found here: " + user + "whit this username " + username);
         return user;
+    }
+
+    public String deleteUser(user user, String confirm){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        logger.info("the input password is: " + confirm);
+
+
+       if(!encoder.matches(confirm,user.getPassword())){
+           logger.info("Now its not matching!!");
+           return "Password is incorrect";
+
+       }
+       if(confirm.isEmpty()){
+           return "please enter your password";
+       }
+
+        logger.info("Matching+");
+        userRepo.delete(user);
+        return "";
     }
 
 

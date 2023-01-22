@@ -13,7 +13,7 @@
 <body>
 <nav th:replace="navbar :: navbar"></nav>
 
-<div class="container" th:object="${user}">
+<div class="container">
     <h3>Your Profile</h3>
     <div class="card text-center">
         <div class="card-header">
@@ -30,18 +30,20 @@
             </ul>
         </div>
         <div class="card-body">
-            <form name="f" th:action="@{/api/login}" method="post">
+            <form name="f" th:action="@{/api/user/P}" method="post" th:object="${form}">
             <h5 class="card-title">Change password</h5>
                 <div class="form-outline form-white mb-4">
-                    <input type="text" class="form-control form-control-lg" placeholder="Old Password" />
+                    <input type="password" class="form-control form-control-lg" placeholder="Old Password" th:name="oldPassword" />
                 </div>
                 <div class="form-outline form-white mb-4">
-                    <input type="text" class="form-control form-control-lg" placeholder="New Password" />
+                    <input type="password" class="form-control form-control-lg" placeholder="New Password" th:name="newPassword1" />
                 </div>
                 <div class="form-outline form-white mb-4">
-                    <input type="text" class="form-control form-control-lg" placeholder="New Password again" />
+                    <input type="password" class="form-control form-control-lg" placeholder="New Password again" th:name="NewPassword2"/>
                 </div>
-            <a href="#" class="btn btn-secondary">Change password</a>
+                <button class="btn btn-outline-secondary btn-lg px-5 " type="submit">Save</button>
+                <div class="alert alert-danger mt-5"  th:if="${errorMsg != null}" th:text="${errorMsg}"></div>
+                <div class="alert alert-success mt-5"  th:if="${successMsg != null}" th:text="${successMsg}"></div>
             </form>
         </div>
     </div>

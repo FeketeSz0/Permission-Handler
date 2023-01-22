@@ -1,7 +1,10 @@
-package io.feketesz.login.model;
+package io.feketesz.login.model.forms;
+
+import org.springframework.lang.Nullable;
 
 public class registrationForm {
     private String username;
+
     private String password;
     private String password2;
 
@@ -12,8 +15,12 @@ public class registrationForm {
         this.password2 = password2;
     }
 
+
+
     public registrationForm() {
     }
+
+
 
     public String getUsername() {
         return username;
