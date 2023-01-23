@@ -32,7 +32,10 @@
         <th><a th:href="@{'admin/edit/' + ${user.username}}">Edit</a></th>
         </tbody>
 
-
+        <div th:if="${msg} != null"
+             th:classappend="${msg.contains('deleted')} ? 'alert alert-success' : 'alert alert-danger'">
+            <p th:text="${msg}"></p>
+        </div>
     </table>
 </div>
 </body>

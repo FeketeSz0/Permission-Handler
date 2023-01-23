@@ -132,7 +132,7 @@ public class userController {
         model.addAttribute("user", user);
 
 
-        String responseMsg = userService.deleteUser(user, confirm);
+        String responseMsg = userService.deleteUserbyAdmin(user, confirm);
         logger.info("response msg is " + responseMsg);
 
         if (!responseMsg.isEmpty()) {

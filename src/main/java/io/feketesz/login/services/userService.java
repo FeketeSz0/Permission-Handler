@@ -88,7 +88,7 @@ public class userService {
         return user;
     }
 
-    public String deleteUser(user user, String confirm){
+    public String deleteUserbyAdmin(user user, String confirm){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         logger.info("the input password is: " + confirm);
 
@@ -117,9 +117,20 @@ public class userService {
 
 
     }
-    public void deleteUser(String username){
-        var user = userRepo.findByusername(username).get();
-        userRepo.delete(user);
+    public String deleteUserbyAdmin(String deleteableUsername, String adminUsername){
+        var deleteable = userRepo.findByusername(deleteableUsername).get();
+        var admin = userRepo.findByusername(adminUsername).get();
+
+        if(deleteable.getRole() == roleEnum.USER){
+            userRepo.delete(deleteable);
+            return "user deleted";
+        } else if (deleteable.getRole() == roleEnum.ADMIN && admin.getRole() == roleEnum.MASTER) {
+            userRepo.delete(deleteable);
+            return "admin deleted";
+
+        }else{
+            return "no privilege to delete an admin. Please contact to a MASTER user";
+        }
     }
 }
 
