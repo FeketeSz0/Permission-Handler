@@ -13,27 +13,22 @@ public class myUserDetails implements UserDetails {
     private String username;
     private String password;
     private Boolean isActive;
-    private List<roleEnum> roles;
+    private roleEnum role;
 
 
     public myUserDetails(user user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.isActive = user.getIsActive();
-        this.roles = user.getRoles();
+        this.role = user.getRole();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for(roleEnum role: roles){
-            logger.info("role added to grantedAuthority: " + role.getRole());
-            authorities.add(new SimpleGrantedAuthority(role.getRole().toUpperCase()));
-        }
 
-        for(var a :authorities){
-            logger.info("these are the content of auhtorities " + a);
-        }
+            authorities.add(new SimpleGrantedAuthority(role.getRole()));
+
         return authorities;
     }
 

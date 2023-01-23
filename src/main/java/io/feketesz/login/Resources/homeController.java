@@ -7,14 +7,12 @@ import io.feketesz.login.model.user;
 import io.feketesz.login.services.userService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +62,7 @@ public class homeController {
         } else {
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
-            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            boolean isAdmin =  currentAdmin.getRole() == roleEnum.ADMIN;
             model.addAttribute("isAdmin", isAdmin);
 
         }
@@ -80,7 +78,7 @@ public class homeController {
         }
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
-            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+        boolean isAdmin =  currentAdmin.getRole() == roleEnum.ADMIN;
             model.addAttribute("isAdmin", isAdmin);
 
 
@@ -102,7 +100,7 @@ public class homeController {
         }
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
-            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            boolean isAdmin =  currentAdmin.getRole() == roleEnum.ADMIN;;
             model.addAttribute("isAdmin", isAdmin);
 
 
@@ -129,7 +127,7 @@ public class homeController {
         }
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
-            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+        boolean isAdmin =  currentAdmin.getRole() == roleEnum.ADMIN;
             model.addAttribute("isAdmin", isAdmin);
 
 
@@ -162,7 +160,7 @@ public class homeController {
         } else {
             isLoggedIn = true;
             var user = userService.finduser(principal.getName());
-            var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            boolean isAdmin =  user.getRole() == roleEnum.ADMIN;
             model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
@@ -177,7 +175,7 @@ public class homeController {
         } else {
             isLoggedIn = true;
             var user = userService.finduser(principal.getName());
-            var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            boolean isAdmin =  user.getRole() == roleEnum.ADMIN;;
             model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
@@ -227,7 +225,7 @@ public class homeController {
         } else {
             isLoggedIn = true;
             var user = userService.finduser(principal.getName());
-            var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            boolean isAdmin =  user.getRole() == roleEnum.ADMIN;;
             model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
@@ -248,7 +246,7 @@ public class homeController {
 
         var user = userService.finduser(principal.getName());
 
-        var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+        boolean isAdmin =  user.getRole() == roleEnum.ADMIN;;
         model.addAttribute("isAdmin", isAdmin);
 
         model.addAttribute("confirm", confirm);

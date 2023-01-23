@@ -38,7 +38,7 @@ public class userService {
             return "the fields cannot be empty";
         }
 
-        user newUser = new user(form.getUsername(), new BCryptPasswordEncoder().encode(form.getPassword()), true, List.of(roleEnum.USER));
+        user newUser = new user(form.getUsername(), new BCryptPasswordEncoder().encode(form.getPassword()), true, roleEnum.USER);
         userRepo.save(newUser);
 
         return "";
@@ -112,7 +112,7 @@ public class userService {
         var original = userRepo.findByusername(user.getUsername()).get();
         logger.info("Incoming user: \n " + user.getUsername() +"\n" + user.getIsActive());
         original.setIsActive(user.getIsActive());
-        original.setRoles(user.getRoles());
+        original.setRole(user.getRole());
         userRepo.save(original);
 
 

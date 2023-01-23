@@ -27,7 +27,7 @@
         <tbody th:each="user : *{userlist}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.username}"></td>
-        <td th:each="role: *{user.roles}"><span th:text="*{role} "> </span></td>
+        <td th:text="${user.role}"></td>
         <td th:text="${user.isActive}"></td>
         <th><a th:href="@{'admin/edit/' + ${user.username}}">Edit</a></th>
         </tbody>

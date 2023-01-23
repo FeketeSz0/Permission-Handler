@@ -25,9 +25,6 @@ public class myUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<user> user = userRepo.findByusername(username);
-        for (roleEnum role : user.get().getRoles()) {
-            logger.info("loadingByUserName, these are the user roles :" + role);
-        };
         user.orElseThrow(() -> new UsernameNotFoundException("username '" + username + "' not found"));
         return user.map(u -> new myUserDetails(u)).get();
 

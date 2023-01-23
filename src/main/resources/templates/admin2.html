@@ -32,10 +32,10 @@
 
 
         <td>
-            <div th:each="role : ${availableRoles}" class="form-check">
-                <input class="form-check-input" type="radio" th:value="${role}" th:field="*{roles}" th:id="${role}" th:checked="${user.roles.contains(role)}" />
-                <label class="form-check-label" th:for="${role}">
-                    <span th:text="${role}"></span>
+            <div th:each="roleSample : ${availableRoles}" class="form-check">
+                <input class="form-check-input" type="radio" th:value="${roleSample}" th:field="*{role}" th:id="${roleSample}" th:checked="${user.role.equals(roleSample)}" />
+                <label class="form-check-label" th:for="${roleSample}">
+                    <span th:text="${roleSample}"></span>
                 </label>
             </div>
         </td>

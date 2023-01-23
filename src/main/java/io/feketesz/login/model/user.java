@@ -16,16 +16,16 @@ public class user {
     private boolean isActive;
 
 
-    private List<roleEnum> Roles;
+    private roleEnum Role;
 
     public user() {
     }
 
-    public user(String username, String password, boolean isActive, List<roleEnum> roles) {
+    public user(String username, String password, boolean isActive, roleEnum roles) {
         this.username = username;
         this.password = password;
         this.isActive = isActive;
-        Roles = roles;
+        Role = roles;
     }
 
     public int getId() {
@@ -60,11 +60,11 @@ public class user {
         isActive = active;
     }
 
-    public List<roleEnum> getRoles() {
-        return Roles;
+    public roleEnum getRole() {
+        return Role;
     }
 
-    public void setRoles(List<roleEnum> roles) {
-        Roles = roles;
+    public void setRole(roleEnum role) {
+        Role = role;
     }
 }
