@@ -37,7 +37,7 @@
                 <h5 class="card-title">Delete Your Account</h5>
                 <form name="f" th:action="@{/api/user/D}"  method="post">
                 <div class="form-outline form-white mb-4">
-                    <input type="text" class="form-control form-control-lg" placeholder="confirm with password"
+                    <input type="password" class="form-control form-control-lg" placeholder="confirm with password"
                            th:value="${confirm}" name="confirm"/>
                 </div>
                 <button type="submit" class="btn btn-danger">Delete Account</button>

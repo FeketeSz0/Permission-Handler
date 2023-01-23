@@ -26,6 +26,7 @@ public class LoginApplication {
             userRepo.save(new user("Aron",new BCryptPasswordEncoder().encode("sample"),true, roleEnum.USER));
             userRepo.save(new user("admin",new BCryptPasswordEncoder().encode("admin"),true, roleEnum.ADMIN));
             userRepo.save(new user("Gabe",new BCryptPasswordEncoder().encode("admin"),true, roleEnum.ADMIN));
+            userRepo.save(new user("master",new BCryptPasswordEncoder().encode("master"),true, roleEnum.MASTER));
         };
 
     }
