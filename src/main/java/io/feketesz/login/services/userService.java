@@ -117,6 +117,10 @@ public class userService {
 
 
     }
+    public void deleteUser(String username){
+        var user = userRepo.findByusername(username).get();
+        userRepo.delete(user);
+    }
 }
 
 

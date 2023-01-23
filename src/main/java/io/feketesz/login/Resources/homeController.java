@@ -76,15 +76,17 @@ public class homeController {
     public String adminPage(Model model, Principal principal, Boolean isLoggedIn) {
         if (principal == null) {
             isLoggedIn = false;
-        } else {
+            return "login";
+        }
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
             var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
             model.addAttribute("isAdmin", isAdmin);
 
-        }
+
         model.addAttribute("isLoggedIn", isLoggedIn);
         var userlist = userService.userList();
+        userlist.remove(currentAdmin);
         userlist.forEach(user -> logger.info("user is in the list: " + user.getUsername()));
 
         model.addAttribute("user", new user());
@@ -96,13 +98,14 @@ public class homeController {
     public String adminPageEdit(Model model, Principal principal, Boolean isLoggedIn, @PathVariable("username") String username) {
         if (principal == null) {
             isLoggedIn = false;
-        } else {
+            return "login";
+        }
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
             var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
             model.addAttribute("isAdmin", isAdmin);
 
-        }
+
 
         model.addAttribute("isLoggedIn", isLoggedIn);
 
@@ -122,12 +125,13 @@ public class homeController {
     public String submitAdminPageEdit(Model model, Principal principal, Boolean isLoggedIn, @ModelAttribute user user) {
         if (principal == null) {
             isLoggedIn = false;
-        } else {
+            return "login";
+        }
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
             var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
             model.addAttribute("isAdmin", isAdmin);
-        }
+
 
 
 
@@ -140,6 +144,15 @@ public class homeController {
         return "redirect:/api/admin";
 
 
+    }
+
+    @PostMapping("admin/delete/{username}")
+    public String deleteAccount(Model model, Principal principal, Boolean isLoggedIn, @PathVariable("username") String username){
+        userService.deleteUser(username);
+        if(principal == null){isLoggedIn = false; return "login";}
+        isLoggedIn = true;
+        model.addAttribute("isLoggedIn",isLoggedIn);
+        return "redirect:/api/admin";
     }
 
     @GetMapping("/user")

@@ -16,7 +16,7 @@
 <div class="container">
     <h3>Edit User</h3>
     <form  name="f" th:action="@{/api/admin/edit/}+${user.username}" th:method="post"  th:object="${user}">
-        <button type="submit" class="btn btn-outline-secondary btn-lg btn-block px-5">Save</button>
+
     <table class="table table-hover">
         <thead>
         <th scope="col">userId</th>
@@ -53,8 +53,11 @@
 
 
     </table>
-
+        <button type="submit" class="btn btn-outline-secondary">Save changes</button>
     </form>
+    <form name="d" th:action="@{/api/admin/delete/}+${user.username}" th:method="post"  th:object="${user}">
+            <button class="btn btn-outline-danger" type="submit">Delete user</button>
+    </form >
 
 </div>
 

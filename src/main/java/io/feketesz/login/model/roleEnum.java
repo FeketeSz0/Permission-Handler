@@ -7,7 +7,9 @@ import jakarta.persistence.Table;
 
 public enum roleEnum {
     USER("USER"),
-    ADMIN("ADMIN");
+    ADMIN("ADMIN"),
+    MASTER("MASTER");
+
 
     private String role;
     roleEnum(String user) {
