@@ -15,6 +15,8 @@
 
 <div class="container">
     <h3>Edit User</h3>
+    <form  name="f" th:action="@{/api/admin/edit/}+${user.username}" th:method="post"  th:object="${user}">
+        <button type="submit" class="btn btn-outline-secondary btn-lg btn-block px-5">Save</button>
     <table class="table table-hover">
         <thead>
         <th scope="col">userId</th>
@@ -23,28 +25,37 @@
         <th scope="col">Active?</th>
         </thead>
 
-        <tbody th:object="${user}">
-        <td th:text="*{id}"></td>
-        <td><input class="form-control" type="text" th:value="*{username}"></td>
+        <tbody>
+        <td th:text="*{id}" th:value="*{id}"></td>
+        <td th:text="*{username}" th:value="*{username}"> </td>
+
 
 
         <td>
             <div th:each="role : ${availableRoles}" class="form-check">
-                <input class="form-check-input" type="checkbox" th:value="${role}" th:field="*{roles}" th:id="${role}" th:checked="${user.roles.contains(role)}"/>
+                <input class="form-check-input" type="radio" th:value="${role}" th:field="*{roles}" th:id="${role}" th:checked="${user.roles.contains(role)}" />
                 <label class="form-check-label" th:for="${role}">
                     <span th:text="${role}"></span>
                 </label>
             </div>
         </td>
 
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  th:field="${user.isActive}" th:checked="${user.isActive}"/>
 
-        <td><input class="form-control-input" type="checkbox" th:checked="*{isActive}"></td>
+            </div>
+
+        </td>
 
 
         </tbody>
 
 
     </table>
+
+    </form>
+
 </div>
 
 

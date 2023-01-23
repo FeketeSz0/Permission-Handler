@@ -13,7 +13,7 @@ public class user {
 
     private String username;
     private String password;
-    private Boolean isActive;
+    private boolean isActive;
 
 
     private List<roleEnum> Roles;
@@ -21,7 +21,7 @@ public class user {
     public user() {
     }
 
-    public user(String username, String password, Boolean isActive, List<roleEnum> roles) {
+    public user(String username, String password, boolean isActive, List<roleEnum> roles) {
         this.username = username;
         this.password = password;
         this.isActive = isActive;
@@ -52,11 +52,11 @@ public class user {
         this.password = password;
     }
 
-    public Boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 

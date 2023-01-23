@@ -1,6 +1,5 @@
 package io.feketesz.login.model;
 
-import io.feketesz.login.configurations.securityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class myUserDetails implements UserDetails {
     Logger logger = LoggerFactory.getLogger(myUserDetails.class);
@@ -21,7 +19,7 @@ public class myUserDetails implements UserDetails {
     public myUserDetails(user user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
-        this.isActive = user.isActive();
+        this.isActive = user.getIsActive();
         this.roles = user.getRoles();
     }
 

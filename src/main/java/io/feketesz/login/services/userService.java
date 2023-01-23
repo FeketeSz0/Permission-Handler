@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -110,7 +108,15 @@ public class userService {
     }
 
 
+    public void editUser(user user) {
+        var original = userRepo.findByusername(user.getUsername()).get();
+        logger.info("Incoming user: \n " + user.getUsername() +"\n" + user.getIsActive());
+        original.setIsActive(user.getIsActive());
+        original.setRoles(user.getRoles());
+        userRepo.save(original);
 
+
+    }
 }
 
 

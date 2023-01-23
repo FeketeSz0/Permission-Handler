@@ -7,6 +7,7 @@ import io.feketesz.login.model.user;
 import io.feketesz.login.services.userService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class homeController {
             model.addAttribute("isAdmin", isAdmin);
 
         }
-        logger.info("the path variable is: " + username);
+
         model.addAttribute("isLoggedIn", isLoggedIn);
 
         List<roleEnum> availableRoles = List.of(roleEnum.values());
@@ -110,10 +111,35 @@ public class homeController {
 
 
         var user = userService.finduser(username);
-        logger.info("the found user is: " + user.getUsername());
+
+
         model.addAttribute("user", user);
 
         return "admin2";
+    }
+
+    @PostMapping("/admin/edit/{username}")
+    public String submitAdminPageEdit(Model model, Principal principal, Boolean isLoggedIn, @ModelAttribute user user) {
+        if (principal == null) {
+            isLoggedIn = false;
+        } else {
+            isLoggedIn = true;
+            var currentAdmin = userService.finduser(principal.getName());
+            var isAdmin = currentAdmin.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
+            model.addAttribute("isAdmin", isAdmin);
+        }
+
+
+
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+
+        model.addAttribute("user",user);
+        userService.editUser(user);
+
+        return "redirect:/api/admin";
+
+
     }
 
     @GetMapping("/user")
@@ -142,7 +168,7 @@ public class homeController {
             model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("user", user);
         }
-        changePasswordForm form =  new changePasswordForm();
+        changePasswordForm form = new changePasswordForm();
         model.addAttribute("form", form);
 
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -151,11 +177,13 @@ public class homeController {
 
 
     @PostMapping("/user/P")
-    public String userEditPassword(Model model, @ModelAttribute changePasswordForm form, Principal principal,Boolean isLoggedIn) {
+    public String userEditPassword(Model model, @ModelAttribute changePasswordForm form, Principal principal, Boolean isLoggedIn) {
 
-        if(principal==null){
-            isLoggedIn=false;
-        }else{isLoggedIn=true;}
+        if (principal == null) {
+            isLoggedIn = false;
+        } else {
+            isLoggedIn = true;
+        }
 
         model.addAttribute("isLoggedIn", isLoggedIn);
 
@@ -164,14 +192,14 @@ public class homeController {
 
 
         model.addAttribute("form", form);
-        String responseMsg = userService.changePassword(form,user);
+        String responseMsg = userService.changePassword(form, user);
 
 
         if (responseMsg.equals("")) {
             String successMsg = "password saved";
-            model.addAttribute("successMsg",successMsg);
+            model.addAttribute("successMsg", successMsg);
 
-        }else{
+        } else {
             model.addAttribute("errorMsg", responseMsg);
         }
 
@@ -193,14 +221,14 @@ public class homeController {
 
         String confirm = "";
 
-        model.addAttribute("confirm",confirm);
+        model.addAttribute("confirm", confirm);
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage3";
     }
 
     @PostMapping("/user/D")
-        public String userDeleteAccount(Principal principal, Model model, HttpServletRequest request, HttpServletResponse response, Boolean isLoggedIn,
-                                        String confirm){
+    public String userDeleteAccount(Principal principal, Model model, HttpServletRequest request, HttpServletResponse response, Boolean isLoggedIn,
+                                    String confirm) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -210,27 +238,26 @@ public class homeController {
         var isAdmin = user.getRoles().stream().anyMatch(role -> role.getRole() == roleEnum.ADMIN.getRole());
         model.addAttribute("isAdmin", isAdmin);
 
-        model.addAttribute("confirm",confirm);
-        model.addAttribute("user",user);
+        model.addAttribute("confirm", confirm);
+        model.addAttribute("user", user);
 
 
         String responseMsg = userService.deleteUser(user, confirm);
         logger.info("response msg is " + responseMsg);
 
-        if(!responseMsg.isEmpty()){
-            model.addAttribute("responseMsg",responseMsg);
+        if (!responseMsg.isEmpty()) {
+            model.addAttribute("responseMsg", responseMsg);
             isLoggedIn = true;
             model.addAttribute("isLoggedIn", isLoggedIn);
             return "userpage3";
         }
 
-        isLoggedIn=false;
+        isLoggedIn = false;
         model.addAttribute("isLoggedIn", isLoggedIn);
-        new SecurityContextLogoutHandler().logout(request,response,auth);
+        new SecurityContextLogoutHandler().logout(request, response, auth);
 
         return "index";
     }
-
 
 
     @GetMapping("/register")
