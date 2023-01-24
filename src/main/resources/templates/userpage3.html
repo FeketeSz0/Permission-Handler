@@ -35,7 +35,7 @@
 
             <div class="form-group">
                 <h5 class="card-title">Delete Your Account</h5>
-                <form name="f" th:action="@{/api/user/D}"  method="post">
+                <form name="f" th:action="@{/api/user/D}"  method="post" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <div class="form-outline form-white mb-4">
                     <input type="password" class="form-control form-control-lg" placeholder="confirm with password"
                            th:value="${confirm}" name="confirm"/>

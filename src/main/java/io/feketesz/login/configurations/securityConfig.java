@@ -28,15 +28,18 @@ public class securityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
-        return http
+        return http.csrf().and()
+
                 .authorizeRequests()
                 .requestMatchers("/api/user/**").hasAnyAuthority("USER","ADMIN", "MASTER")
                 .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN", "MASTER")
                 .and().exceptionHandling().accessDeniedPage("/api/login")
 
+
+                .and().headers().cacheControl().disable()
                 .and().formLogin().loginPage("/api/login").defaultSuccessUrl("/api")
                 .and()
-                .logout().logoutUrl("/api/logout").logoutSuccessUrl("/api/login?logout=true")
+                .logout().logoutUrl("/api/logout").logoutSuccessUrl("/api/login?logout=true").clearAuthentication(true)
 
                 .and().build();
     }

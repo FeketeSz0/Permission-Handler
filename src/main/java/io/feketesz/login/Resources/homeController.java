@@ -62,7 +62,7 @@ public class homeController {
         } else {
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
-            boolean isAdmin =  currentAdmin.getRole() == roleEnum.ADMIN;
+            boolean isAdmin =  currentAdmin.getRole() == roleEnum.ADMIN || currentAdmin.getRole() == roleEnum.MASTER;
             model.addAttribute("isAdmin", isAdmin);
 
         }
@@ -100,9 +100,6 @@ public class homeController {
 
     }
 
-    @GetMapping("/403")
-    public String forbidden() {
-        return "403";
-    }
+
 
 }

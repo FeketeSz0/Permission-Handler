@@ -30,7 +30,7 @@
             </ul>
         </div>
         <div class="card-body">
-            <form name="f" th:action="@{/api/user/P}" method="post" th:object="${form}">
+            <form name="f" th:action="@{/api/user/P}" method="post" th:object="${form}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <h5 class="card-title">Change password</h5>
                 <div class="form-outline form-white mb-4">
                     <input type="password" class="form-control form-control-lg" placeholder="Old Password" th:name="oldPassword" />

@@ -15,7 +15,7 @@
 
 <div class="container">
     <h3>Edit User</h3>
-    <form  name="f" th:action="@{/api/admin/edit/}+${user.username}" th:method="post"  th:object="${user}">
+    <form  name="f" th:action="@{/api/admin/edit/}+${user.username}" th:method="post"  th:object="${user}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     <table class="table table-hover">
         <thead>

@@ -17,7 +17,7 @@
 
 
 <div class="container py-5 h-100">
-<form name="f" th:action="@{/api/login}" method="post">
+<form name="f" th:action="@{/api/login}" method="post" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <div class="form-group" >
         <div class="row d-flex justify-content-center align-items-center ">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">

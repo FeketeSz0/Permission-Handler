@@ -41,6 +41,7 @@ public class adminController {
         userlist.remove(currentAdmin);
 
 
+        model.addAttribute("MASTER",roleEnum.MASTER);
         model.addAttribute("user", new user());
         model.addAttribute("userlist", userlist);
         return "admin";
@@ -52,6 +53,7 @@ public class adminController {
             isLoggedIn = false;
             return "login";
         }
+
         isLoggedIn = true;
         var currentAdmin = userService.finduser(principal.getName());
         boolean isAdmin = currentAdmin.getRole() == roleEnum.ADMIN || currentAdmin.getRole() == roleEnum.MASTER;
@@ -65,6 +67,9 @@ public class adminController {
 
 
         var user = userService.finduser(username);
+        if(user.getRole() == roleEnum.MASTER){
+            return "redirect:/api/admin";
+        }
 
 
         model.addAttribute("user", user);
@@ -82,6 +87,7 @@ public class adminController {
         var currentAdmin = userService.finduser(principal.getName());
         boolean isAdmin = currentAdmin.getRole() == roleEnum.ADMIN || currentAdmin.getRole() == roleEnum.MASTER;
         model.addAttribute("isAdmin", isAdmin);
+
 
 
         model.addAttribute("isLoggedIn", isLoggedIn);
