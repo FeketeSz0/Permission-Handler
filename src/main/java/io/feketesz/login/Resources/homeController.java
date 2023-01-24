@@ -24,14 +24,14 @@ import java.util.List;
 @RequestMapping("/api")
 public class homeController {
 
-    Logger logger = LoggerFactory.getLogger(homeController.class);
+
     @Autowired
     userService userService;
 
 
     @GetMapping("/login")
-    public String loginPage(Principal principal, @RequestParam(value = "logout", required = false) boolean logout,
-                            Model model,
+    public String loginPage(Principal principal, Model model,
+                            @RequestParam(value = "logout", required = false) boolean logout,
                             @RequestParam(value = "registered", required = false) boolean registered) {
 
         if (logout) {
@@ -54,11 +54,10 @@ public class homeController {
 
 
     @GetMapping()
-    public String index(Principal principal, Model model, Boolean isLoggedIn) {
+    public String index(Principal principal, Model model, boolean isLoggedIn) {
 
 
-        if (principal == null) {
-            isLoggedIn = false;
+        if (principal == null) {isLoggedIn = false;
         } else {
             isLoggedIn = true;
             var currentAdmin = userService.finduser(principal.getName());
@@ -87,7 +86,6 @@ public class homeController {
     public String register(Model model, @ModelAttribute registrationForm form) {
 
         model.addAttribute("form", form);
-        logger.info("the put infos are " + form.getUsername() + " " + form.getPassword() + " " + form.getPassword2());
 
         String responseMsg = userService.register(form);
         if (!responseMsg.equals("")) {

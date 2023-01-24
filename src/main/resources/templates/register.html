@@ -38,7 +38,9 @@
                                 <div class="form-outline form-white mb-5">
                                     <input type="password" id="password2" class="form-control form-control-lg"
                                            placeholder="password again"  th:name="password2"/>
+                                    <p class="mt-3">the password must contain 8 characters, <br/> at least 1 capital and a number </p>
                                 </div>
+
                                 <button class="btn btn-outline-secondary btn-lg px-5 " type="submit">Create account</button>
                                 <div class="alert alert-danger mt-5"  th:if="${errorMsg != null}" th:text="${errorMsg}"></div>
 

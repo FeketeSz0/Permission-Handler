@@ -29,61 +29,46 @@ public class userController {
     userService userService;
 
 
-
-
-
     @GetMapping()
-    public String userPage(Principal principal, Model model, Boolean isLoggedIn) {
-        if (principal == null) {
-            isLoggedIn = false;
-        } else {
-            isLoggedIn = true;
-            var user = userService.finduser(principal.getName());
-            boolean isAdmin =  user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
-            model.addAttribute("isAdmin", isAdmin);
-            model.addAttribute("user", user);
-        }
+    public String userPage(Principal principal, Model model) {
+
+        boolean isLoggedIn = true;
+        var user = userService.finduser(principal.getName());
+        boolean isAdmin = user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("user", user);
+
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage";
     }
 
     @GetMapping("/P")
-    public String userEditPassword(Principal principal, Model model, Boolean isLoggedIn) {
-        if (principal == null) {
-            isLoggedIn = false;
-        } else {
-            isLoggedIn = true;
-            var user = userService.finduser(principal.getName());
-            boolean isAdmin =  user.getRole() == roleEnum.ADMIN ||user.getRole() == roleEnum.MASTER;
-            model.addAttribute("isAdmin", isAdmin);
-            model.addAttribute("user", user);
-        }
-        changePasswordForm form = new changePasswordForm();
-        model.addAttribute("form", form);
+    public String userEditPassword(Principal principal, Model model) {
 
+        boolean isLoggedIn = true;
+        var user = userService.finduser(principal.getName());
+        boolean isAdmin = user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
+
+        changePasswordForm form = new changePasswordForm();
+
+        model.addAttribute("form", form);
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("user", user);
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage2";
     }
 
 
     @PostMapping("/P")
-    public String userEditPassword(Model model, @ModelAttribute changePasswordForm form, Principal principal, Boolean isLoggedIn) {
+    public String userEditPassword(Model model, @ModelAttribute changePasswordForm form, Principal principal) {
 
-        if (principal == null) {
-            isLoggedIn = false;
-        } else {
-            isLoggedIn = true;
-        }
-
-        model.addAttribute("isLoggedIn", isLoggedIn);
-
+        boolean isLoggedIn = true;
 
         var user = userService.finduser(principal.getName());
-
-
-        model.addAttribute("form", form);
         String responseMsg = userService.changePassword(form, user);
 
+        model.addAttribute("form", form);
+        model.addAttribute("isLoggedIn", isLoggedIn);
 
         if (responseMsg.equals("")) {
             String successMsg = "password saved";
@@ -98,26 +83,23 @@ public class userController {
 
 
     @GetMapping("/D")
-    public String userDeleteAccount(Principal principal, Model model, Boolean isLoggedIn) {
-        if (principal == null) {
-            isLoggedIn = false;
-        } else {
-            isLoggedIn = true;
-            var user = userService.finduser(principal.getName());
-            boolean isAdmin =  user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
-            model.addAttribute("isAdmin", isAdmin);
-            model.addAttribute("user", user);
-        }
+    public String userDeleteAccount(Principal principal, Model model) {
+
+        boolean isLoggedIn = true;
+        var user = userService.finduser(principal.getName());
+        boolean isAdmin = user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
 
         String confirm = "";
 
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("user", user);
         model.addAttribute("confirm", confirm);
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "userpage3";
     }
 
     @PostMapping("/D")
-    public String userDeleteAccount(Principal principal, Model model, HttpServletRequest request, HttpServletResponse response, Boolean isLoggedIn,
+    public String userDeleteAccount(Principal principal, Model model, HttpServletRequest request, HttpServletResponse response, boolean isLoggedIn,
                                     String confirm) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -125,7 +107,7 @@ public class userController {
 
         var user = userService.finduser(principal.getName());
 
-        boolean isAdmin =  user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
+        boolean isAdmin = user.getRole() == roleEnum.ADMIN || user.getRole() == roleEnum.MASTER;
         model.addAttribute("isAdmin", isAdmin);
 
         model.addAttribute("confirm", confirm);

@@ -37,6 +37,15 @@ public class userService {
         if(form.getUsername().isEmpty() || form.getPassword().isEmpty()){
             return "the fields cannot be empty";
         }
+        if(form.getPassword().length() < 8){
+            return "the minimal length is 8";
+        }
+        if(!form.getPassword().matches(".*[0-9].*")){
+            return "password must contain a number";
+        }
+        if (!form.getPassword().matches(".*[A-Z].*")) {
+            return "password must contain a capital";
+        }
 
         user newUser = new user(form.getUsername(), new BCryptPasswordEncoder().encode(form.getPassword()), true, roleEnum.USER);
         userRepo.save(newUser);
@@ -65,12 +74,29 @@ public class userService {
         if(form.getOldPassword().equals(form.getNewPassword1())){
             return "the new password cannot be the old one";
         }
+        if(form.getNewPassword1().length() < 8){
+            return "the minimal length is 8";
+        }
+        if(!form.getNewPassword1().matches(".*[0-9].*")){
+            return "password must contain a number";
+        }
+        if (!form.getNewPassword1().matches(".*[A-Z].*")) {
+            return "password must contain a capital";
+        }
+
 
 
         user.setPassword(encoder.encode(form.getNewPassword1()));
         userRepo.save(user);
             return "";
 
+    }
+
+    public String passwordValidator(String password){
+
+
+
+        return "";
     }
 
     public List<user> userList(){
@@ -84,17 +110,17 @@ public class userService {
                 new NoSuchElementException("element not found"));
 
 
-        logger.info("This what userService/finduser found here: " + user + "whit this username " + username);
+
         return user;
     }
 
     public String deleteUserbyAdmin(user user, String confirm){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        logger.info("the input password is: " + confirm);
+
 
 
        if(!encoder.matches(confirm,user.getPassword())){
-           logger.info("Now its not matching!!");
+
            return "Password is incorrect";
 
        }
@@ -102,7 +128,7 @@ public class userService {
            return "please enter your password";
        }
 
-        logger.info("Matching+");
+
         userRepo.delete(user);
         return "";
     }
